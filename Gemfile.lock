@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.railscamp.org/
+  remote: https://rubygems.org/
   specs:
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
@@ -29,7 +29,11 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     arel (3.0.2)
+    better_errors (0.9.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
     builder (3.0.4)
+    coderay (1.0.9)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -37,6 +41,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    diff-lcs (1.2.4)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -76,9 +81,23 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rake (10.0.4)
+    rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    redcarpet (2.3.0)
+    rouge (0.3.7)
+      thor
+    rspec-core (2.14.0.rc1)
+    rspec-expectations (2.14.0.rc1)
+      diff-lcs (>= 1.1.3, < 2.0)
+    rspec-mocks (2.14.0.rc1)
+    rspec-rails (2.14.0.rc1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (= 2.14.0.rc1)
+      rspec-expectations (= 2.14.0.rc1)
+      rspec-mocks (= 2.14.0.rc1)
     sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -103,9 +122,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  better_errors
   coffee-rails (~> 3.2.1)
   jquery-rails
   pg
   rails (= 3.2.13)
+  redcarpet
+  rouge
+  rspec-rails (= 2.14.0.rc1)
   sass-rails (~> 3.2.3)
   uglifier (>= 1.0.3)
