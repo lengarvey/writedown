@@ -1,7 +1,7 @@
 = form_for @article, :url => article_path do |f|
   %section#entry
     = f.text_area :markdown
-    .fake-text-area{:contenteditable => true, :style => 'display:none'}
+    .fake-text-area{:contenteditable => 'plaintext-only', :style => 'display:none'}
       = @article.markdown
 
   %section#display

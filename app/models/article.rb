@@ -21,7 +21,11 @@ class Article
   private
 
   def convert_to_html
-    MarkdownService.new.render_to_html(@markdown)
+    html = MarkdownService.new.render_to_html(@markdown)
+    Rails.logger.info "--------"
+    Rails.logger.info html
+    Rails.logger.info "--------"
+    html
   end
 
 end

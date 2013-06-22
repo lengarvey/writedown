@@ -4,12 +4,15 @@ class WriteDownView extends Backbone.View
     @$('#entry').bind('scroll', @scrollEntry)
     @hideSubmitbutton()
     @swapTextareas()
-    @_throttledUpdateTextArea = _.throttle(@updateTextarea, 500)
+    @_throttledUpdateTextArea = _.debounce(@updateTextarea, 500)
     @$('.fake-text-area').bind('input', @_throttledUpdateTextArea)
+    # @markdown_converter = new Markdown.Converter()
 
   events:
     "submit form": "submitForm"
+    # "input .fake-text-area": "updateLocally"
     # "input .fake-text-area": "updateTextarea"
+    # "input textarea": "doFormSubmission"
 
   submitForm: (e) ->
     e.preventDefault()
@@ -24,6 +27,7 @@ class WriteDownView extends Backbone.View
     )
 
   markdownSubmitted: (body) =>
+    console.log body
     @replacePreview(body)
 
   formUrl: ->
@@ -61,14 +65,16 @@ class WriteDownView extends Backbone.View
     @$('.fake-text-area').show()
 
   sanitizeEntryText: (text) ->
-    text.replace(/<div>/g, ->
+    text.replace(/<div>\s*<br>\s*<\/div>/g, ->
+      '<div></div>'
+    ).replace(/<div>/g, ->
       ''
     ).replace(/<\/div>/g, ->
-      '\r\n'
+      '\n'
     ).replace(/&nbsp;/g, ->
-      ' '
-    ).replace(/<br>/g, ->
       ''
+    ).replace(/<br>/g, ->
+      '\n'
     ).replace(/&gt;/g, ->
       '>'
     ).replace(/&lt;/g, ->
@@ -76,9 +82,14 @@ class WriteDownView extends Backbone.View
     ).replace(/&amp;/g, ->
       '&'
     )
+  updateLocally: ->
+    text = @sanitizeEntryText(@$('.fake-text-area').html())
+    converted_html = @markdown_converter.makeHtml(text)
+
+    $elem = $("<div id='display-container'>#{converted_html}</div>")
+    @$('#display').html($elem)
 
   updateTextarea: =>
-    console.log "doing it slow"
     @$('textarea').val(@sanitizeEntryText(@$('.fake-text-area').html()))
     @doFormSubmission()
 
