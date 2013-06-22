@@ -4,13 +4,13 @@ class WriteDownView extends Backbone.View
     @$('#entry').bind('scroll', @scrollEntry)
     @hideSubmitbutton()
     @swapTextareas()
-    @_throttledUpdateTextArea = _.debounce(@updateTextarea, 500)
+    @_throttledUpdateTextArea = _.debounce(@updateTextarea, 4000)
     @$('.fake-text-area').bind('input', @_throttledUpdateTextArea)
-    # @markdown_converter = new Markdown.Converter()
+    @markdown_converter = marked
 
   events:
     "submit form": "submitForm"
-    # "input .fake-text-area": "updateLocally"
+    "input .fake-text-area": "updateLocally"
     # "input .fake-text-area": "updateTextarea"
     # "input textarea": "doFormSubmission"
 
@@ -27,7 +27,6 @@ class WriteDownView extends Backbone.View
     )
 
   markdownSubmitted: (body) =>
-    console.log body
     @replacePreview(body)
 
   formUrl: ->
@@ -84,7 +83,7 @@ class WriteDownView extends Backbone.View
     )
   updateLocally: ->
     text = @sanitizeEntryText(@$('.fake-text-area').html())
-    converted_html = @markdown_converter.makeHtml(text)
+    converted_html = @markdown_converter(text)
 
     $elem = $("<div id='display-container'>#{converted_html}</div>")
     @$('#display').html($elem)
