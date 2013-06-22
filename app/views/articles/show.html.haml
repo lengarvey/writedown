@@ -1,0 +1,10 @@
+= form_for @article, :url => article_path do |f|
+  %section#entry
+    = f.text_area :markdown
+
+  %section#display
+    = @article.html
+  %section#actions
+    = f.submit 'Convert'
+
+

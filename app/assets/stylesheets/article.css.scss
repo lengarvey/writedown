@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+section {
+  position: absolute;
+  width: 50%;
+  bottom: 0;
+  &#entry {
+    left: 0;
+    top: 0;
+  }
+  &#display {
+    right: 0;
+    top: 0;
+  }
+  &#actions {
+    bottom: 5px;
+    z-index: 10;
+    width: 50%;
+    height: 30px;
+    text-align: center;
+  }
+}
+
+textarea {
+  width: 100%;
+  height: 100%;
+}

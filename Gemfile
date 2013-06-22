@@ -23,3 +23,4 @@ end
 gem 'jquery-rails'
 gem 'redcarpet'
 gem 'rouge'
+gem 'haml-rails'
