@@ -1,12 +1,15 @@
 class WriteDownView extends Backbone.View
   initialize: ->
     @$form = @$('form')
-    @$('textarea').bind('input propertychange', @keypressDetected)
-    @$('textarea').bind('scroll', @scrollEntry)
+    @$('#entry').bind('scroll', @scrollEntry)
     @hideSubmitbutton()
+    @swapTextareas()
+    @_throttledUpdateTextArea = _.throttle(@updateTextarea, 500)
+    @$('.fake-text-area').bind('input', @_throttledUpdateTextArea)
 
   events:
     "submit form": "submitForm"
+    # "input .fake-text-area": "updateTextarea"
 
   submitForm: (e) ->
     e.preventDefault()
@@ -21,7 +24,6 @@ class WriteDownView extends Backbone.View
     )
 
   markdownSubmitted: (body) =>
-    console.log body
     @replacePreview(body)
 
   formUrl: ->
@@ -34,15 +36,52 @@ class WriteDownView extends Backbone.View
     @$('#display').html(body)
 
   keypressDetected: (e) =>
-    console.log e
     @doFormSubmission()
 
   hideSubmitbutton: ->
-    @$('#actions input').hide()
+    @$('#actions').hide()
+
+  getElemTopBottomPaddingPixels: ($elem) ->
+    top = parseInt($elem.css('padding-top'))
+    bottom = parseInt($elem.css('padding-bottom'))
+    top + bottom
+
 
   scrollEntry: (e) =>
     $elem = $(e.target)
-    $('#display').scrollTop($elem.scrollTop())
+    height_of_entry = $elem.find('.fake-text-area').height()
+    height_of_window = $(window).height()
+    percent = $elem.scrollTop() / (height_of_entry - height_of_window)
+    $targetElem = @$('#display')
+    scroll_amount = ($targetElem.find('#display-container').height() - height_of_window) * percent
+    $targetElem.scrollTop(scroll_amount)
+
+  swapTextareas: ->
+    @$('textarea').hide()
+    @$('.fake-text-area').show()
+
+  sanitizeEntryText: (text) ->
+    text.replace(/<div>/g, ->
+      ''
+    ).replace(/<\/div>/g, ->
+      '\r\n'
+    ).replace(/&nbsp;/g, ->
+      ' '
+    ).replace(/<br>/g, ->
+      ''
+    ).replace(/&gt;/g, ->
+      '>'
+    ).replace(/&lt;/g, ->
+      '<'
+    ).replace(/&amp;/g, ->
+      '&'
+    )
+
+  updateTextarea: =>
+    console.log "doing it slow"
+    @$('textarea').val(@sanitizeEntryText(@$('.fake-text-area').html()))
+    @doFormSubmission()
+
 
 
 
