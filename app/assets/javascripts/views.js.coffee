@@ -2,6 +2,7 @@ class WriteDownView extends Backbone.View
   initialize: ->
     @$form = @$('form')
     @$('textarea').bind('input propertychange', @keypressDetected)
+    @$('textarea').bind('scroll', @scrollEntry)
     @hideSubmitbutton()
 
   events:
@@ -39,7 +40,11 @@ class WriteDownView extends Backbone.View
   hideSubmitbutton: ->
     @$('#actions input').hide()
 
+  scrollEntry: (e) =>
+    $elem = $(e.target)
+    $('#display').scrollTop($elem.scrollTop())
+
 
 
 $ ->
-  view = new WriteDownView({el: $(document)})
+  WriteDown.Views.writeDownView = new WriteDownView({el: $(document)})
