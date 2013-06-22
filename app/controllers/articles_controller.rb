@@ -5,6 +5,10 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(params[:article])
-    render :show
+    if request.xhr?
+      render :partial => 'display_html'
+    else
+      render :show
+    end
   end
 end

@@ -1,0 +1,3 @@
+window.WriteDown =
+  Routers: {}
+  Views: {}
