@@ -3,7 +3,7 @@
     = f.text_area :markdown
 
   %section#display
-    = @article.html
+    = @article.html.try(:html_safe)
   %section#actions
     = f.submit 'Convert'
 
