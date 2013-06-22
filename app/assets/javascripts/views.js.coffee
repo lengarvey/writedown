@@ -2,6 +2,7 @@ class WriteDownView extends Backbone.View
   initialize: ->
     @$form = @$('form')
     @$('textarea').bind('input propertychange', @keypressDetected)
+    @hideSubmitbutton()
 
   events:
     "submit form": "submitForm"
@@ -34,6 +35,9 @@ class WriteDownView extends Backbone.View
   keypressDetected: (e) =>
     console.log e
     @doFormSubmission()
+
+  hideSubmitbutton: ->
+    @$('#actions input').hide()
 
 
 
