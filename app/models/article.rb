@@ -11,11 +11,19 @@ class Article
     false
   end
 
-  attr_reader :markdown, :html
+  attr_reader :markdown
 
   def markdown=(markdown)
     @markdown = markdown
     @html = convert_to_html
+  end
+
+  def html
+    if @html.blank?
+      "<p>Start typing in white space on the left</p>"
+    else
+      @html
+    end
   end
 
   private

@@ -7,6 +7,7 @@ class WriteDownView extends Backbone.View
     @_throttledUpdateTextArea = _.debounce(@updateTextarea, 4000)
     @$('.fake-text-area').bind('input', @_throttledUpdateTextArea)
     @markdown_converter = marked
+    @setStatus('Unsaved')
 
   events:
     "submit form": "submitForm"
@@ -18,8 +19,13 @@ class WriteDownView extends Backbone.View
     e.preventDefault()
     @doFormSubmission()
 
+  setStatus: (status) ->
+    @$('#status').html(status)
+
   doFormSubmission: ->
     $.ajax(
+      beforeSend: =>
+        @setStatus('Saving')
       url: @formUrl()
       type: @formMethod()
       success: @markdownSubmitted
@@ -27,6 +33,7 @@ class WriteDownView extends Backbone.View
     )
 
   markdownSubmitted: (body) =>
+    @setStatus('Saved')
     @replacePreview(body)
 
   formUrl: ->
@@ -82,6 +89,7 @@ class WriteDownView extends Backbone.View
       '&'
     )
   updateLocally: ->
+    @setStatus('Unsaved')
     text = @sanitizeEntryText(@$('.fake-text-area').html())
     converted_html = @markdown_converter(text)
 
