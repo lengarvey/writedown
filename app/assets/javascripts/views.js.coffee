@@ -18,12 +18,12 @@ class WriteDownView extends Backbone.View
     # "input .fake-text-area": "updateTextarea"
     # "input textarea": "doFormSubmission"
 
-  saveArticle: ->
-    localStorage.setItem('article', @$('.fake-text-area').html())
+  saveArticle: (key='article') ->
+    localStorage.setItem(key, @$('.fake-text-area').html())
 
-  loadArticle: ->
-    if localStorage.hasOwnProperty('article') and localStorage.getItem('article').length > 0
-      @$('.fake-text-area').html(localStorage.getItem('article'))
+  loadArticle: (key='article') ->
+    if localStorage.hasOwnProperty(key) and localStorage.getItem(key).length > 0
+      @$('.fake-text-area').html(localStorage.getItem(key))
       @updateTextarea()
 
   resetEverything: (e) ->
@@ -122,6 +122,7 @@ class WriteDownView extends Backbone.View
 
   keybinds:
     'option+command+s': 'saveArticleToComputer'
+    'option+command+l': 'loadPreviousArticleFromComputer'
     'option+command+h': 'toggleMarkdownReference'
     'ctrl+command+n': 'newArticle'
     'esc': 'clearOverlays'
@@ -146,7 +147,17 @@ class WriteDownView extends Backbone.View
 
   saveArticleToComputer: (e) =>
     e.preventDefault()
-    console.log 'Save article'
+    name = window.prompt('Enter the name of your Markdown file')
+    @saveArticle(name)
+
+  loadPreviousArticleFromComputer: (e) =>
+    e.preventDefault()
+    promptString = 'Which of the following do you wish to load:'
+    for key of localStorage
+      promptString += "\n#{key}"
+
+    name = window.prompt(promptString)
+    @loadArticle(name)
 
   toggleMarkdownReference: (e) =>
     e.preventDefault()

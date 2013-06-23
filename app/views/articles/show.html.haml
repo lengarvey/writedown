@@ -1,4 +1,5 @@
 = form_for @article, :url => article_path do |f|
+  = f.hidden_field :name
   %nav#menu
     = link_to 'New', article_path, :id => 'new-article'
     = link_to 'Github', 'https://github.com/lengarvey/writedown'

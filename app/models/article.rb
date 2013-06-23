@@ -4,14 +4,16 @@ class Article
   include ActiveModel::Validations
 
   def initialize(params = {})
+    @name = Time.now.to_i
     self.markdown = params[:markdown] if params[:markdown]
+    @name = params[:name] if params[:name]
   end
 
   def persisted?
     false
   end
 
-  attr_reader :markdown, :html
+  attr_reader :markdown, :html, :name
 
   def markdown=(markdown)
     @markdown = markdown
