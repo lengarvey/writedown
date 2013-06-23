@@ -34,6 +34,17 @@ section {
   height: 30px;
   text-align: right;
 }
+#menu {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  top: 0;
+  background-color: #777;
+  padding: 5px;
+  a {
+    text-decoration: none;
+  }
+}
 textarea, .fake-text-area {
   width: 100%;
   min-height: 100%;

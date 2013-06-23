@@ -1,2 +1,5 @@
 #display-container<
-  = @article.html.try(:html_safe)
+  - if @article.html
+    = @article.html.try(:html_safe)
+  - else
+    = render :partial => 'new_user'

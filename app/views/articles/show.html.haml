@@ -1,13 +1,42 @@
 = form_for @article, :url => article_path do |f|
+  %nav#menu
+    = link_to 'New', article_path, :id => 'new-article'
+    = link_to 'Github', 'https://github.com/lengarvey/writedown'
   %section#entry
     = f.text_area :markdown
     .fake-text-area{:contenteditable => 'plaintext-only', :style => 'display:none'}
       = @article.markdown
-
   %section#display
     = render :partial => 'display_html'
   %section#actions
     = f.submit 'Convert'
   %section#status
 
+#new-message{:style => 'display:none'}
+  = render :partial => 'new_user'
 
+#markdown-reference{:data => { :role => 'overlay' }}<
+  %h2 Markdown Reference
+  :markdown
+    ### Headings
+
+          # Header 1
+          ## Header 2
+          ###### Header 6
+
+    ### Links
+
+          An [example](http://url.com/ "Title")
+
+    ### Images
+
+          ![alt text](/path/img.jpg "Title")
+
+    ### Code Fences
+
+          ```ruby
+          puts "this is ruby code"
+          ```
+#help{:data => { :role => 'overlay' }}<
+  %h2 Help
+  = render :partial => 'new_user'

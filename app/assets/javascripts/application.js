@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require marked
+//= require mousetrap
 //= require underscore
 //= require backbone
 //= require app_backbone

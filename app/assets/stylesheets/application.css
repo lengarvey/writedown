@@ -11,5 +11,6 @@
  *= require_self
  *= require normalize
  *= require github
- *= require_tree .
+ *= require common
+ *= require article
  */

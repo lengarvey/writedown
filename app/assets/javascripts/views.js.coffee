@@ -8,12 +8,30 @@ class WriteDownView extends Backbone.View
     @$('.fake-text-area').bind('input', @_throttledUpdateTextArea)
     @markdown_converter = marked
     @setStatus('Unsaved')
+    @bindKeys()
+    @loadArticle()
 
   events:
     "submit form": "submitForm"
     "input .fake-text-area": "updateLocally"
+    "click #new-article": "resetEverything"
     # "input .fake-text-area": "updateTextarea"
     # "input textarea": "doFormSubmission"
+
+  saveArticle: ->
+    localStorage.setItem('article', @$('.fake-text-area').html())
+
+  loadArticle: ->
+    if localStorage.hasOwnProperty('article') and localStorage.getItem('article').length > 0
+      @$('.fake-text-area').html(localStorage.getItem('article'))
+      @updateTextarea()
+
+  resetEverything: (e) ->
+    e.preventDefault()
+    localStorage.clear()
+    @$('.fake-text-area').html('')
+    @$('#display').html(@$('#new-message').html())
+    @$('textarea').val('')
 
   submitForm: (e) ->
     e.preventDefault()
@@ -33,6 +51,7 @@ class WriteDownView extends Backbone.View
     )
 
   markdownSubmitted: (body) =>
+    @saveArticle()
     @setStatus('Saved')
     @replacePreview(body)
 
@@ -50,6 +69,7 @@ class WriteDownView extends Backbone.View
 
   hideSubmitbutton: ->
     @$('#actions').hide()
+    @$('#menu').hide()
 
   getElemTopBottomPaddingPixels: ($elem) ->
     top = parseInt($elem.css('padding-top'))
@@ -78,7 +98,7 @@ class WriteDownView extends Backbone.View
     ).replace(/<\/div>/g, ->
       '\n'
     ).replace(/&nbsp;/g, ->
-      ''
+      ' '
     ).replace(/<br>/g, ->
       '\n'
     ).replace(/&gt;/g, ->
@@ -99,6 +119,51 @@ class WriteDownView extends Backbone.View
   updateTextarea: =>
     @$('textarea').val(@sanitizeEntryText(@$('.fake-text-area').html()))
     @doFormSubmission()
+
+  keybinds:
+    'option+command+s': 'saveArticleToComputer'
+    'option+command+h': 'toggleMarkdownReference'
+    'ctrl+command+n': 'newArticle'
+    'esc': 'clearOverlays'
+    'f1': 'toggleHelp'
+
+  bindKeys: ->
+    for keys, fun of @keybinds
+      Mousetrap.bind(keys, @[fun])
+
+    # bind tab on our text area
+    $('.fake-text-area').bind('keydown', @keyPressed)
+
+  keyPressed: (e) =>
+    keyCode = e.keyCode || e.which
+    if keyCode == 9
+      e.preventDefault()
+      @tabPressed()
+
+  tabPressed: ->
+    console.log 'press tab'
+    document.execCommand('insertHTML', true, '&nbsp;&nbsp;')
+
+  saveArticleToComputer: (e) =>
+    e.preventDefault()
+    console.log 'Save article'
+
+  toggleMarkdownReference: (e) =>
+    e.preventDefault()
+    $('#markdown-reference').toggleClass('hover')
+
+  toggleHelp: (e) =>
+    e.preventDefault()
+    $('#help').toggleClass('hover')
+
+  clearOverlays: (e) =>
+    e.preventDefault()
+    $('*[data-role="overlay"]').removeClass('hover')
+
+  newArticle: (e) =>
+    e.preventDefault()
+    @resetEverything(e)
+
 
 
 
